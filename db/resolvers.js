@@ -1,42 +1,42 @@
-// const cursos = [
-//     {
-//         titulo: 'JavaScript Moderno Guía Definitiva Construye +10 Proyectos',
-//         tecnologia: 'JavaScript ES6',
-//     },
-//     {
-//         titulo: 'React – La Guía Completa: Hooks Context Redux MERN +15 Apps',
-//         tecnologia: 'React',
-//     },
-//     {
-//         titulo: 'Node.js – Bootcamp Desarrollo Web inc. MVC y REST API’s',
-//         tecnologia: 'Node.js'
-//     }, 
-//     {
-//         titulo: 'ReactJS Avanzado – FullStack React GraphQL y Apollo',
-//         tecnologia: 'React'
-//     }
-// ];
+const Usuario = require('../models/Usuario')
 
 const resolvers = {
     Query: {
-        obtenerCursos: () => "Hola Mundo"
-//         obtenerCursos : ( _, { input }, ctx, info) =>  {
-//         const resultado = cursos.filter ( curso => curso.tecnologia === input.tecnologia);
-//     return resultado;
-//         },
-        
-//     obtenerTecnologia: (  _, { input }, ctx ,  info     ) => {
-//     const resultado = cursos.filter( curso => curso.titulo  === input.titulo);
-//     return resultado;
-// },
-// obtenerTodos: (ctx) =>{
-//     console.log("soy un contexto", ctx);
-//     console.log("curso", cursos);
-//     return cursos;
-// }
-// }
+        obtenerCursos : () => { "Hola Mundo" }
 
-}
+
+    },
+    Mutation: {
+        nuevoUsuario :  async (_, { input }) => {
+
+            const { email , password } = input;
+            // console.log(input);
+            // return "Creando..."
+
+            //Revisar si el usuario ya esta registrado
+            const existeUsuario = await Usuario.findOne({email});
+            console.log('existeUsuario')
+
+            if(existeUsuario){
+                throw new Error('El ususario ya esta registrado');
+            }
+            //hasear su password
+           
+
+            try {
+                 // guardarlo en la base de datos
+                 const usuario = new Usuario(input)
+                 usuario.save(); //guardarlo
+                 return usuario;
+
+            }catch(error){
+                console.log('error');
+            }
+
+        },
+
+    }
+
 }
 
 module.exports = resolvers;
